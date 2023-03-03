@@ -8,6 +8,7 @@ import co.com.novatec.dao.ProfesorDao;
 import co.com.novatec.dto.AlumnoDTO;
 import co.com.novatec.dto.ProfesorDTO;
 import co.com.novatec.exceptions.DaoException;
+import com.google.common.collect.Maps;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,10 @@ public class ProfesorDaoImpl implements ProfesorDao {
     private static final String SQL_INSERT = "INSERT INTO profesor(nombre, apellido, id_especialidad) VALUES(:nombre, :apellido, :id_especialidad)";
 
     private static final String SQL_SELEC = "SELECT id, nombre, apellido, id_especialidad FROM profesor ";
+
+    private static final String SQL_DELETE = "DELETE FROM profesor WHERE id = :id";
+
+    private static final String SQL_EDIT = "UPDATE profesor SET nombre = :nombre, apellido = :apellido, id_especialidad = :id_especialidad where id = :id";
 
     @Override
     public ProfesorDTO create(ProfesorDTO profesorDTO) throws DaoException {
@@ -75,6 +80,38 @@ public class ProfesorDaoImpl implements ProfesorDao {
             throw new DaoException(ex);
         }
         return respuesta;
+    }
+
+    @Override
+    public Boolean delete(Integer id) throws DaoException {
+        try {
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue(ProfesorDTO.ID, id);
+
+            int i = this.jdbcTemplate.update(SQL_DELETE, params);
+
+            return i > 0 ? Boolean.TRUE : Boolean.FALSE;
+
+        } catch (Throwable ex) {
+            throw new DaoException(ex);
+        }
+    }
+
+    @Override
+    public Boolean edit(ProfesorDTO profesorDTO) throws DaoException {
+        try {
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue(ProfesorDTO.NOMBRE, profesorDTO.getNombre());
+            params.addValue(ProfesorDTO.APELLIDO, profesorDTO.getApellido());
+            params.addValue(ProfesorDTO.ID_ESPECIALIDAD, profesorDTO.getIdEspecialidad());
+            params.addValue(ProfesorDTO.ID, profesorDTO.getId());
+
+            int i = this.jdbcTemplate.update(SQL_EDIT, params);
+
+            return i > 0 ? Boolean.TRUE : Boolean.FALSE;
+        } catch (Throwable ex) {
+            throw new DaoException(ex);
+        }
     }
 
 }

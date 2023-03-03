@@ -29,7 +29,10 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  *
@@ -164,6 +167,102 @@ public class CrudController {
         ResponseEntity<?> response = null;
         try {
             response = this.crudService.getEspecialidades();
+        } catch (Throwable ex) {
+            logger.log(Level.SEVERE, "Error ejecutando metodo: " + nombreMetodo, ex);
+            response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.log(Level.INFO, "Respuesta metodo: {0} = {1}", new Object[]{nombreMetodo, this.gson.toJson(response)});
+        return response;
+    }
+
+    @DeleteMapping("/teacher/{identificador}")
+    @ApiOperation(value = "Delete teacher", notes = "Return delete")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class),
+        @ApiResponse(code = 400, message = "Invalid or null data"),
+        @ApiResponse(code = 401, message = "Unauthorized"),
+        @ApiResponse(code = 404, message = "create not found"),
+        @ApiResponse(code = 500, message = "Operation exception")})
+    public ResponseEntity<?> borrarProfesor(@ApiParam(name = "identificador", value = "User id", example = "1", required = true)
+            @PathVariable("identificador") Integer id) {
+        String nombreMetodo = new Object() {
+        }.getClass().getEnclosingMethod().getName();
+        logger.log(Level.INFO, "Ejecucion metodo: {0}", nombreMetodo);
+        ResponseEntity<?> response = null;
+        try {
+            response = this.crudService.deleteProfesor(id);
+        } catch (Throwable ex) {
+            logger.log(Level.SEVERE, "Error ejecutando metodo: " + nombreMetodo, ex);
+            response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.log(Level.INFO, "Respuesta metodo: {0} = {1}", new Object[]{nombreMetodo, this.gson.toJson(response)});
+        return response;
+    }
+
+    @DeleteMapping("/student/{identificador}")
+    @ApiOperation(value = "Delete teacher", notes = "Return deleted")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class),
+        @ApiResponse(code = 400, message = "Invalid or null data"),
+        @ApiResponse(code = 401, message = "Unauthorized"),
+        @ApiResponse(code = 404, message = "create not found"),
+        @ApiResponse(code = 500, message = "Operation exception")})
+    public ResponseEntity<?> borrarAlumno(@ApiParam(name = "identificador", value = "User id", example = "1", required = true)
+            @PathVariable("identificador") Integer id) {
+        String nombreMetodo = new Object() {
+        }.getClass().getEnclosingMethod().getName();
+        logger.log(Level.INFO, "Ejecucion metodo: {0}", nombreMetodo);
+        ResponseEntity<?> response = null;
+        try {
+            response = this.crudService.deleteAlumno(id);
+        } catch (Throwable ex) {
+            logger.log(Level.SEVERE, "Error ejecutando metodo: " + nombreMetodo, ex);
+            response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.log(Level.INFO, "Respuesta metodo: {0} = {1}", new Object[]{nombreMetodo, this.gson.toJson(response)});
+        return response;
+    }
+
+    @PatchMapping("/student")
+    @ApiOperation(value = "Edit student", notes = "Return  edit")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class),
+        @ApiResponse(code = 400, message = "Invalid or null data"),
+        @ApiResponse(code = 401, message = "Unauthorized"),
+        @ApiResponse(code = 404, message = "create not found"),
+        @ApiResponse(code = 500, message = "Operation exception")})
+    public ResponseEntity<?> editAlumno(@ApiParam(value = "Group to create", required = true)
+            @RequestBody AlumnoResponse alumnoResponse) {
+        String nombreMetodo = new Object() {
+        }.getClass().getEnclosingMethod().getName();
+        logger.log(Level.INFO, "Ejecucion metodo: {0}", nombreMetodo);
+        ResponseEntity<?> response = null;
+        try {
+            response = this.crudService.editAlumno(alumnoResponse);
+        } catch (Throwable ex) {
+            logger.log(Level.SEVERE, "Error ejecutando metodo: " + nombreMetodo, ex);
+            response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        logger.log(Level.INFO, "Respuesta metodo: {0} = {1}", new Object[]{nombreMetodo, this.gson.toJson(response)});
+        return response;
+    }
+
+    @PatchMapping("/teacher")
+    @ApiOperation(value = "Edit teacher", notes = "Return  edit")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Successful operation", response = Boolean.class),
+        @ApiResponse(code = 400, message = "Invalid or null data"),
+        @ApiResponse(code = 401, message = "Unauthorized"),
+        @ApiResponse(code = 404, message = "create not found"),
+        @ApiResponse(code = 500, message = "Operation exception")})
+    public ResponseEntity<?> editProfesor(@ApiParam(value = "Group to create", required = true)
+            @RequestBody ProfesorResponse profesorResponse) {
+        String nombreMetodo = new Object() {
+        }.getClass().getEnclosingMethod().getName();
+        logger.log(Level.INFO, "Ejecucion metodo: {0}", nombreMetodo);
+        ResponseEntity<?> response = null;
+        try {
+            response = this.crudService.editProfesor(profesorResponse);
         } catch (Throwable ex) {
             logger.log(Level.SEVERE, "Error ejecutando metodo: " + nombreMetodo, ex);
             response = new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

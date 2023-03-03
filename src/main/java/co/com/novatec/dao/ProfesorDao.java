@@ -31,4 +31,22 @@ public interface ProfesorDao {
      */
     List<ProfesorDTO> get() throws DaoException;
 
+    /**
+     * Elimina un objeto profesor
+     *
+     * @param id
+     * @return
+     * @throws DaoException
+     */
+    Boolean delete(Integer id) throws DaoException;
+
+    /**
+     * Edita un profesor enviado
+     *
+     * @param profesorDTO
+     * @return
+     * @throws DaoException
+     */
+    Boolean edit(ProfesorDTO profesorDTO) throws DaoException;
+
 }

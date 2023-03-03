@@ -48,13 +48,49 @@ public interface CrudService {
      * @throws ServiceException
      */
     ResponseEntity<?> getProfesores() throws ServiceException;
-    
-        /**
-     * Consulta la lista de profesores disponibles en bd
+
+    /**
+     * Consulta la lista de especialidades disponibles en bd
      *
      * @return
      * @throws ServiceException
      */
     ResponseEntity<?> getEspecialidades() throws ServiceException;
+
+    /**
+     * Elimina un profesor por identificador
+     *
+     * @param id
+     * @return
+     * @throws ServiceException
+     */
+    ResponseEntity<?> deleteProfesor(Integer id) throws ServiceException;
+
+    /**
+     * Elimina un alumno por identificador
+     *
+     * @param id
+     * @return
+     * @throws ServiceException
+     */
+    ResponseEntity<?> deleteAlumno(Integer id) throws ServiceException;
+
+    /**
+     * Edita un objeto profesor
+     *
+     * @param profesorResponse
+     * @return
+     * @throws ServiceException
+     */
+    ResponseEntity<?> editProfesor(ProfesorResponse profesorResponse) throws ServiceException;
+
+    /**
+     * Edita un objeto alumno
+     *
+     * @param alumnoResponse
+     * @return
+     * @throws ServiceException
+     */
+    ResponseEntity<?> editAlumno(AlumnoResponse alumnoResponse) throws ServiceException;
 
 }

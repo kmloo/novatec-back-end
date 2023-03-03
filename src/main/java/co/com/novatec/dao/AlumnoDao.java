@@ -31,4 +31,21 @@ public interface AlumnoDao {
      */
     List<AlumnoDTO> get() throws DaoException;
 
+    /**
+     * Borra un alumno por su id
+     *
+     * @param id
+     * @return
+     * @throws DaoException
+     */
+    Boolean delete(Integer id) throws DaoException;
+    
+    /**
+     * Metodo para editar el alumno
+     * @param alumnoDTO
+     * @return
+     * @throws DaoException 
+     */
+    Boolean edit(AlumnoDTO alumnoDTO)throws DaoException;
+
 }

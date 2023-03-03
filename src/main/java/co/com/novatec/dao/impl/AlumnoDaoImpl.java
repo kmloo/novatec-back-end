@@ -4,7 +4,6 @@
  */
 package co.com.novatec.dao.impl;
 
-import co.com.novatec.dto.ProfesorDTO;
 import co.com.novatec.exceptions.DaoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,15 +23,19 @@ import java.util.List;
  */
 @Repository
 public class AlumnoDaoImpl implements AlumnoDao {
-    
+
     @Autowired
     @Qualifier("namedParameterJdbcTemplateMsBd")
     private NamedParameterJdbcTemplate jdbcTemplate;
-    
+
     private static final String SQL_INSERT = "INSERT INTO alumno(nombre, apellido, curso) VALUES(:nombre, :apellido, :curso)";
-    
+
     private static final String SQL_GET = "SELECT ID, nombre, apellido, curso FROM  alumno";
-    
+
+    private static final String SQL_DELETE = "DELETE FROM alumno WHERE id = :id";
+
+    private static final String SQL_EDIT = "UPDATE alumno SET nombre = :nombre, apellido = :apellido, curso = :curso where id = :id";
+
     @Override
     public AlumnoDTO create(AlumnoDTO alumnoDTO) throws DaoException {
         try {
@@ -41,17 +44,17 @@ public class AlumnoDaoImpl implements AlumnoDao {
             params.addValue(AlumnoDTO.NOMBRE, alumnoDTO.getNombre());
             params.addValue(AlumnoDTO.APELLIDO, alumnoDTO.getApellido());
             params.addValue(AlumnoDTO.CURSO, alumnoDTO.getCurso());
-            
+
             this.jdbcTemplate.update(SQL_INSERT, params, keyHolder, new String[]{AlumnoDTO.ID});
-            
+
             alumnoDTO.setId(keyHolder != null ? keyHolder.getKey() != null ? keyHolder.getKey().intValue() : null : null);
-            
+
         } catch (Throwable ex) {
             throw new DaoException(ex);
         }
         return alumnoDTO;
     }
-    
+
     @Override
     public List<AlumnoDTO> get() throws DaoException {
         List<AlumnoDTO> respuesta = null;
@@ -76,5 +79,38 @@ public class AlumnoDaoImpl implements AlumnoDao {
         }
         return respuesta;
     }
-    
+
+    @Override
+    public Boolean delete(Integer id) throws DaoException {
+        try {
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue(AlumnoDTO.ID, id);
+
+            int i = this.jdbcTemplate.update(SQL_DELETE, params);
+
+            return i > 0 ? Boolean.TRUE : Boolean.FALSE;
+
+        } catch (Throwable ex) {
+            throw new DaoException(ex);
+        }
+    }
+
+    @Override
+    public Boolean edit(AlumnoDTO alumnoDTO) throws DaoException {
+        try {
+            MapSqlParameterSource params = new MapSqlParameterSource();
+            params.addValue(AlumnoDTO.NOMBRE, alumnoDTO.getNombre());
+            params.addValue(AlumnoDTO.APELLIDO, alumnoDTO.getApellido());
+            params.addValue(AlumnoDTO.CURSO, alumnoDTO.getCurso());
+            params.addValue(AlumnoDTO.ID, alumnoDTO.getId());
+
+            int i = this.jdbcTemplate.update(SQL_EDIT, params);
+
+            return i > 0 ? Boolean.TRUE : Boolean.FALSE;
+
+        } catch (Throwable ex) {
+            throw new DaoException(ex);
+        }
+    }
+
 }

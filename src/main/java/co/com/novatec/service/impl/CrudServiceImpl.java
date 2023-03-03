@@ -104,4 +104,62 @@ public class CrudServiceImpl implements CrudService {
         }
     }
 
+    @Override
+    public ResponseEntity<?> deleteProfesor(Integer id) throws ServiceException {
+        try {
+            if (id != null && id != 0) {
+                Boolean delete = this.profeDao.delete(id);
+                return new ResponseEntity<>(delete, httpHeaders, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Debe enviar un identificador valido", httpHeaders, HttpStatus.BAD_REQUEST);
+            }
+        } catch (Throwable ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> deleteAlumno(Integer id) throws ServiceException {
+        try {
+            if (id != null && id != 0) {
+                Boolean delete = this.alumDao.delete(id);
+                return new ResponseEntity<>(delete, httpHeaders, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Debe enviar un identificador valido", httpHeaders, HttpStatus.BAD_REQUEST);
+            }
+        } catch (Throwable ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> editProfesor(ProfesorResponse profesorResponse) throws ServiceException {
+        ResponseEntity<?> response = null;
+        try {
+            response = UtilHelper.validateRequestProfesor(profesorResponse, httpHeaders);
+            if (response == null) {
+                Boolean res = this.profeDao.edit(UtilHelper.restponseToDto(profesorResponse));
+                response = new ResponseEntity<>(res, httpHeaders, HttpStatus.OK);
+            }
+            return response;
+        } catch (Throwable ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> editAlumno(AlumnoResponse alumnoResponse) throws ServiceException {
+        ResponseEntity<?> response = null;
+        try {
+            response = UtilHelper.validateRequestAlumno(alumnoResponse, httpHeaders);
+            if (response == null) {
+                Boolean res = this.alumDao.edit(UtilHelper.restponseToDto(alumnoResponse));
+                response = new ResponseEntity<>(res, httpHeaders, HttpStatus.OK);
+            }
+            return response;
+        } catch (Throwable ex) {
+            throw new ServiceException(ex);
+        }
+    }
+
 }
