@@ -4,10 +4,8 @@
  */
 package co.com.novatec.helper;
 
-import co.com.novatec.dto.AlumnoDTO;
 import co.com.novatec.dto.EspecialidadDTO;
 import co.com.novatec.dto.ProfesorDTO;
-import co.com.novatec.dto.http.AlumnoResponse;
 import co.com.novatec.dto.http.EspecialidadResponse;
 import co.com.novatec.dto.http.ProfesorResponse;
 import co.com.novatec.dto.http.ResponseObject;
@@ -95,83 +93,6 @@ public class UtilHelper {
 
         if (object.getIdEspecialidad() == null || object.getIdEspecialidad() == 0) {
             return new ResponseEntity<>(ResponseObject.builder().mensaje("Debe enviar la especialidad").build(), headers, HttpStatus.BAD_REQUEST);
-        }
-
-        return null;
-    }
-
-    /**
-     * Procesa un objeto response a dto
-     *
-     * @param object
-     * @return
-     */
-    public static AlumnoDTO restponseToDto(AlumnoResponse object) {
-        return object != null
-                ? AlumnoDTO.builder()
-                        .apellido(object.getApellido())
-                        .id(object.getId())
-                        .curso(object.getCurso())
-                        .nombre(object.getNombre())
-                        .build()
-                : null;
-    }
-
-    /**
-     * Procesa un objeto dto a response
-     *
-     * @param object
-     * @return
-     */
-    public static AlumnoResponse dtoToResponse(AlumnoDTO object) {
-        return object != null
-                ? AlumnoResponse.builder()
-                        .apellido(object.getApellido())
-                        .id(object.getId())
-                        .curso(object.getCurso())
-                        .nombre(object.getNombre())
-                        .build()
-                : null;
-    }
-
-    /**
-     * Genera una lista de repuesta de profesro response
-     *
-     * @param list
-     * @return
-     */
-    public static List<AlumnoResponse> dtoToResponseAlum(List<AlumnoDTO> list) {
-        List<AlumnoResponse> response = new ArrayList<>();
-        if (list != null && !list.isEmpty()) {
-            list.forEach((AlumnoDTO dto) -> {
-                response.add(dtoToResponse(dto));
-            });
-        }
-        return response;
-    }
-
-    /**
-     * Metodo que valida los datos ingresados
-     *
-     * @param object
-     * @param headers
-     * @return
-     */
-    public static ResponseEntity<?> validateRequestAlumno(AlumnoResponse object, HttpHeaders headers) {
-        if (object == null) {
-            return new ResponseEntity<>(ResponseObject.builder().mensaje("Debe enviar un profesor").build(), headers, HttpStatus.BAD_REQUEST);
-        }
-
-        if (object.getApellido() == null || object.getApellido().isEmpty()) {
-            return new ResponseEntity<>(ResponseObject.builder().mensaje("Debe enviar el apellido").build(), headers, HttpStatus.BAD_REQUEST);
-        }
-
-        if (object.getNombre() == null || object.getNombre().isEmpty()) {
-            return new ResponseEntity<>(ResponseObject.builder().mensaje("Debe enviar el nombre").build(), headers, HttpStatus.BAD_REQUEST);
-        }
-
-        if (object.getCurso() == null || object.getCurso().isEmpty()) {
-            return new ResponseEntity<>(ResponseObject.builder().mensaje("Debe enviar el curso").build(), headers, HttpStatus.BAD_REQUEST);
         }
 
         return null;

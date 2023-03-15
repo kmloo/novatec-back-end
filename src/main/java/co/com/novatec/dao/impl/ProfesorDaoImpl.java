@@ -5,14 +5,13 @@
 package co.com.novatec.dao.impl;
 
 import co.com.novatec.dao.ProfesorDao;
-import co.com.novatec.dto.AlumnoDTO;
 import co.com.novatec.dto.ProfesorDTO;
 import co.com.novatec.exceptions.DaoException;
-import com.google.common.collect.Maps;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -49,9 +48,9 @@ public class ProfesorDaoImpl implements ProfesorDao {
 
             this.jdbcTemplate.update(SQL_INSERT, params, keyHolder, new String[]{ProfesorDTO.ID});
 
-            profesorDTO.setId(keyHolder != null ? keyHolder.getKey() != null ? keyHolder.getKey().intValue() : null : null);
+            profesorDTO.setId(keyHolder.getKey() != null ? keyHolder.getKey().intValue() : null);
 
-        } catch (Throwable ex) {
+        } catch (DataAccessException ex) {
             throw new DaoException(ex);
         }
         return profesorDTO;
@@ -76,7 +75,7 @@ public class ProfesorDaoImpl implements ProfesorDao {
                 }
                 return res;
             });
-        } catch (Throwable ex) {
+        } catch (DataAccessException ex) {
             throw new DaoException(ex);
         }
         return respuesta;
@@ -92,7 +91,7 @@ public class ProfesorDaoImpl implements ProfesorDao {
 
             return i > 0 ? Boolean.TRUE : Boolean.FALSE;
 
-        } catch (Throwable ex) {
+        } catch (DataAccessException ex) {
             throw new DaoException(ex);
         }
     }
@@ -109,7 +108,7 @@ public class ProfesorDaoImpl implements ProfesorDao {
             int i = this.jdbcTemplate.update(SQL_EDIT, params);
 
             return i > 0 ? Boolean.TRUE : Boolean.FALSE;
-        } catch (Throwable ex) {
+        } catch (DataAccessException ex) {
             throw new DaoException(ex);
         }
     }

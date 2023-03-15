@@ -5,7 +5,6 @@
 package co.com.novatec.dao.impl;
 
 import co.com.novatec.dao.EspecialidadDao;
-import co.com.novatec.dto.AlumnoDTO;
 import co.com.novatec.dto.EspecialidadDTO;
 import co.com.novatec.exceptions.DaoException;
 import java.util.ArrayList;

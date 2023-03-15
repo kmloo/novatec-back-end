@@ -5,12 +5,11 @@
 package co.com.novatec.service.impl;
 
 import co.com.novatec.constantes.EnumCodificacion;
-import co.com.novatec.dao.AlumnoDao;
 import co.com.novatec.dao.EspecialidadDao;
 import co.com.novatec.dao.ProfesorDao;
-import co.com.novatec.dto.http.AlumnoResponse;
 import co.com.novatec.dto.http.EspecialidadResponse;
 import co.com.novatec.dto.http.ProfesorResponse;
+import co.com.novatec.exceptions.DaoException;
 import co.com.novatec.exceptions.ServiceException;
 import co.com.novatec.helper.UtilHelper;
 import co.com.novatec.service.CrudService;
@@ -32,9 +31,6 @@ public class CrudServiceImpl implements CrudService {
     private ProfesorDao profeDao;
 
     @Autowired
-    private AlumnoDao alumDao;
-
-    @Autowired
     private EspecialidadDao especialidadDao;
 
     private final HttpHeaders httpHeaders;
@@ -46,40 +42,14 @@ public class CrudServiceImpl implements CrudService {
 
     @Override
     public ResponseEntity<?> createProfesor(ProfesorResponse request) throws ServiceException {
-        ResponseEntity<?> response = null;
         try {
-            response = UtilHelper.validateRequestProfesor(request, httpHeaders);
+            ResponseEntity<?> response = UtilHelper.validateRequestProfesor(request, httpHeaders);
             if (response == null) {
                 request = UtilHelper.dtoToResponse(this.profeDao.create(UtilHelper.restponseToDto(request)));
                 response = new ResponseEntity<>(request, httpHeaders, HttpStatus.OK);
             }
             return response;
-        } catch (Throwable ex) {
-            throw new ServiceException(ex);
-        }
-    }
-
-    @Override
-    public ResponseEntity<?> createAlumno(AlumnoResponse request) throws ServiceException {
-        ResponseEntity<?> response = null;
-        try {
-            response = UtilHelper.validateRequestAlumno(request, httpHeaders);
-            if (response == null) {
-                request = UtilHelper.dtoToResponse(this.alumDao.create(UtilHelper.restponseToDto(request)));
-                response = new ResponseEntity<>(request, httpHeaders, HttpStatus.OK);
-            }
-            return response;
-        } catch (Throwable ex) {
-            throw new ServiceException(ex);
-        }
-    }
-
-    @Override
-    public ResponseEntity<?> getAlumnos() throws ServiceException {
-        try {
-            List<AlumnoResponse> list = UtilHelper.dtoToResponseAlum(this.alumDao.get());
-            return new ResponseEntity<>(list, httpHeaders, HttpStatus.OK);
-        } catch (Throwable ex) {
+        } catch (DaoException ex) {
             throw new ServiceException(ex);
         }
     }
@@ -89,7 +59,7 @@ public class CrudServiceImpl implements CrudService {
         try {
             List<ProfesorResponse> list = UtilHelper.dtoToResponse(this.profeDao.get());
             return new ResponseEntity<>(list, httpHeaders, HttpStatus.OK);
-        } catch (Throwable ex) {
+        } catch (DaoException ex) {
             throw new ServiceException(ex);
         }
     }
@@ -99,7 +69,7 @@ public class CrudServiceImpl implements CrudService {
         try {
             List<EspecialidadResponse> list = UtilHelper.dtoToResponseEspecialidad(this.especialidadDao.get());
             return new ResponseEntity<>(list, httpHeaders, HttpStatus.OK);
-        } catch (Throwable ex) {
+        } catch (DaoException ex) {
             throw new ServiceException(ex);
         }
     }
@@ -113,51 +83,21 @@ public class CrudServiceImpl implements CrudService {
             } else {
                 return new ResponseEntity<>("Debe enviar un identificador valido", httpHeaders, HttpStatus.BAD_REQUEST);
             }
-        } catch (Throwable ex) {
-            throw new ServiceException(ex);
-        }
-    }
-
-    @Override
-    public ResponseEntity<?> deleteAlumno(Integer id) throws ServiceException {
-        try {
-            if (id != null && id != 0) {
-                Boolean delete = this.alumDao.delete(id);
-                return new ResponseEntity<>(delete, httpHeaders, HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Debe enviar un identificador valido", httpHeaders, HttpStatus.BAD_REQUEST);
-            }
-        } catch (Throwable ex) {
+        } catch (DaoException ex) {
             throw new ServiceException(ex);
         }
     }
 
     @Override
     public ResponseEntity<?> editProfesor(ProfesorResponse profesorResponse) throws ServiceException {
-        ResponseEntity<?> response = null;
         try {
-            response = UtilHelper.validateRequestProfesor(profesorResponse, httpHeaders);
+            ResponseEntity<?> response = UtilHelper.validateRequestProfesor(profesorResponse, httpHeaders);
             if (response == null) {
                 Boolean res = this.profeDao.edit(UtilHelper.restponseToDto(profesorResponse));
                 response = new ResponseEntity<>(res, httpHeaders, HttpStatus.OK);
             }
             return response;
-        } catch (Throwable ex) {
-            throw new ServiceException(ex);
-        }
-    }
-
-    @Override
-    public ResponseEntity<?> editAlumno(AlumnoResponse alumnoResponse) throws ServiceException {
-        ResponseEntity<?> response = null;
-        try {
-            response = UtilHelper.validateRequestAlumno(alumnoResponse, httpHeaders);
-            if (response == null) {
-                Boolean res = this.alumDao.edit(UtilHelper.restponseToDto(alumnoResponse));
-                response = new ResponseEntity<>(res, httpHeaders, HttpStatus.OK);
-            }
-            return response;
-        } catch (Throwable ex) {
+        } catch (DaoException ex) {
             throw new ServiceException(ex);
         }
     }
